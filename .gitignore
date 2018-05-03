@@ -59,3 +59,4 @@ typings/
 .png
 .html
 config.json
+package-lock.json
