@@ -6,6 +6,8 @@ This is a [Telegram](https://telegram.org/) bot for SUSTech [Unifound Print Mana
 ## Commands
 **Get list of all print stations:** `/allstations`
 
+**Get list of print stations containing given name:** `/stations <name>`
+
 ## Environment
 - Node.js 9.0+
 

@@ -28,6 +28,7 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
     bot.sendMessage(chatId, resp);
 });
 
+// Return status of all stations
 bot.onText(/\/allstations/, async (msg) => {
     const chatId = msg.chat.id;
     try {
@@ -39,6 +40,25 @@ bot.onText(/\/allstations/, async (msg) => {
     } catch (err) {
         console.error(err);
         bot.sendMessage(chatId, 'Something went wrong.');
+    }
+});
+
+// Return status of stations containing given name
+bot.onText(/\/stations (.+)/, async (msg, match) => {
+    const chatId = msg.chat.id;
+    if (match) {
+        try {
+            bot.sendMessage(chatId, 'Query requested, please wait...');
+            var stream = await pms.stream_query_stations(match[1]);
+            streamToBuffer(stream, function (err, buffer) {
+                bot.sendPhoto(chatId, buffer);
+            });
+        } catch (err) {
+            console.error(err);
+            bot.sendMessage(chatId, 'Something went wrong.');
+        }
+    } else {
+        bot.sendMessage(chatId, 'Usage: /stations <name>');
     }
 });
 

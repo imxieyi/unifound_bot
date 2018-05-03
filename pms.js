@@ -125,6 +125,29 @@ var stream_all_stations = async function () {
     return render_stations(pms_all_stations);
 }
 
+var stream_query_stations = async function (query) {
+    if (typeof update_timestamp == 'undefined' || new Date().getTime() - update_timestamp.getTime() > 60000) {
+        var refreshed = false;
+        if (pms_session !== '') {
+            // Check public session status
+            refreshed = await get_all_stations();
+        }
+        if (!refreshed) {
+            if (await public_login()) {
+                refreshed = await get_all_stations();
+            }
+        }
+    }
+    var query_stations = [];
+    for (var i in pms_all_stations) {
+        var station = pms_all_stations[i];
+        if (station.szName.includes(query)) {
+            query_stations.push(station);
+        }
+    }
+    return render_stations(query_stations);
+}
+
 var main = async function () {
     var fs = require('fs');
     var stream = await stream_all_stations();
@@ -139,5 +162,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-    stream_all_stations: stream_all_stations
+    stream_all_stations: stream_all_stations,
+    stream_query_stations: stream_query_stations
 };
