@@ -72,9 +72,19 @@ bot.onText(/\/stations (.+)/, async (msg, match) => {
     if (match) {
         try {
             bot.sendMessage(chatId, 'Query requested, please wait...');
-            var stream = await pms.stream_query_stations(match[1]);
-            streamToBuffer(stream, function (err, buffer) {
-                bot.sendPhoto(chatId, buffer);
+            pms.stream_query_stations(match[1], (err, stream) => {
+                if (err) {
+                    logger.error(err);
+                    bot.sendMessage(chatId, 'Something went wrong.');
+                } else {
+                    streamToBuffer(stream, function (err, buffer) {
+                        var fileOptions = {
+                            filename: chatId + '.png',
+                            contentType: 'image/png'
+                        };
+                        bot.sendPhoto(chatId, buffer, {}, fileOptions);
+                    });
+                }
             });
         } catch (err) {
             logger.error(err);
