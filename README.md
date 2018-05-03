@@ -5,7 +5,7 @@ Telegram Link: [http://t.me/sustech_unifound_bot](http://t.me/sustech_unifound_b
 This is a [Telegram](https://telegram.org/) bot for SUSTech [Unifound Print Management Service (PMS)](http://pms.sustc.edu.cn/) (only accessible from campus network).
 
 ## Commands
-**Get list of all print stations:** `/allstations`
+**Get list of all print stations:** `/stations`
 
 **Get list of print stations containing given name:** `/stations <name>`
 

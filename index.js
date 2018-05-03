@@ -41,38 +41,14 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
     bot.sendMessage(chatId, resp);
 });
 
-// Return status of all stations
-bot.onText(/\/allstations/, async (msg) => {
+// Return status of stations containing given name
+bot.onText(/^\/stations(@sustech_unifound_bot)?(\s+([^\s]+))?$/, async (msg, match) => {
     const chatId = msg.chat.id;
     try {
-        bot.sendMessage(chatId, 'Query requested, please wait...');
-        pms.stream_all_stations((err, stream) => {
-            if (err) {
-                logger.error(err);
-                bot.sendMessage(chatId, 'Something went wrong.');
-            } else {
-                streamToBuffer(stream, function (err, buffer) {
-                    var fileOptions = {
-                        filename: chatId + '.png',
-                        contentType: 'image/png'
-                    };
-                    bot.sendPhoto(chatId, buffer, {}, fileOptions);
-                });
-            }
-        });
-    } catch (err) {
-        logger.error(err);
-        bot.sendMessage(chatId, 'Something went wrong.');
-    }
-});
-
-// Return status of stations containing given name
-bot.onText(/\/stations(@sustech_unifound_bot)?\s+([^\s]+)/, async (msg, match) => {
-    const chatId = msg.chat.id;
-    if (match) {
-        try {
+        logger.info(match);
+        if (match[3]) {
             bot.sendMessage(chatId, 'Query requested, please wait...');
-            pms.stream_query_stations(match[2], (err, stream) => {
+            pms.stream_query_stations(match[3], (err, stream) => {
                 if (err) {
                     logger.error(err);
                     bot.sendMessage(chatId, 'Something went wrong.');
@@ -86,12 +62,26 @@ bot.onText(/\/stations(@sustech_unifound_bot)?\s+([^\s]+)/, async (msg, match) =
                     });
                 }
             });
-        } catch (err) {
-            logger.error(err);
-            bot.sendMessage(chatId, 'Something went wrong.');
+        } else {
+            bot.sendMessage(chatId, 'Query requested, please wait...');
+            pms.stream_all_stations((err, stream) => {
+                if (err) {
+                    logger.error(err);
+                    bot.sendMessage(chatId, 'Something went wrong.');
+                } else {
+                    streamToBuffer(stream, function (err, buffer) {
+                        var fileOptions = {
+                            filename: chatId + '.png',
+                            contentType: 'image/png'
+                        };
+                        bot.sendPhoto(chatId, buffer, {}, fileOptions);
+                    });
+                }
+            });
         }
-    } else {
-        bot.sendMessage(chatId, 'Usage: /stations <name>');
+    } catch (err) {
+        logger.error(err);
+        bot.sendMessage(chatId, 'Something went wrong.');
     }
 });
 
