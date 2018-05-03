@@ -1,0 +1,30 @@
+style.
+    table {
+        border-collapse: collapse;
+        border: 1px solid #000000;
+    }
+    table th {
+        border: 1px solid #000000;
+    }
+    table td {
+        border: 1px solid #000000;
+        padding: 5px;
+    }
+div
+    table
+        thead
+            tr: th Name
+                th Property
+                th Form
+                th Status
+                th Info
+        tbody
+            each station in stations
+                tr
+                    td= station.szName
+                    td= station.szProperty
+                    td= station.szForm
+                    td= station.szStatus
+                    td= station.szStatInfo
+div
+    b Update timestamp: #{timestamp}

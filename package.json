@@ -1,0 +1,34 @@
+{
+  "name": "sustech_unifound_bot",
+  "version": "1.0.0",
+  "description": "SUSTech Unifound Bot for Telegram",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imxieyi/unifound_bot.git"
+  },
+  "keywords": [
+    "sustech",
+    "unifound",
+    "bot",
+    "telegram"
+  ],
+  "author": "imxieyi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/imxieyi/unifound_bot/issues"
+  },
+  "homepage": "https://github.com/imxieyi/unifound_bot#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.30.0",
+    "pug": "^2.0.3",
+    "request-promise": "^4.2.2",
+    "stream-to-buffer": "^0.1.0",
+    "webshot": "^0.18.0",
+    "xmldom": "^0.1.27"
+  }
+}
