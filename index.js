@@ -2,7 +2,20 @@ const pms = require('./pms');
 const config = require('./config');
 const TelegramBot = require('node-telegram-bot-api');;
 const streamToBuffer = require('stream-to-buffer');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, label, prettyPrint } = format;
 
+const logger = createLogger({
+    level: 'info',
+    format: combine(
+        timestamp(),
+        prettyPrint()
+    ),
+    transports: [
+        new transports.Console(),
+        new transports.File({ filename: config.log_file })
+    ]
+});
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token = config.tg_bot_token;
@@ -38,7 +51,7 @@ bot.onText(/\/allstations/, async (msg) => {
             bot.sendPhoto(chatId, buffer);
         });
     } catch (err) {
-        console.error(err);
+        logger.error(err);
         bot.sendMessage(chatId, 'Something went wrong.');
     }
 });
@@ -54,7 +67,7 @@ bot.onText(/\/stations (.+)/, async (msg, match) => {
                 bot.sendPhoto(chatId, buffer);
             });
         } catch (err) {
-            console.error(err);
+            logger.error(err);
             bot.sendMessage(chatId, 'Something went wrong.');
         }
     } else {
@@ -64,5 +77,5 @@ bot.onText(/\/stations (.+)/, async (msg, match) => {
 
 bot.on('message', (msg) => {
     const chatId = msg.chat.id;
-    console.log('['+chatId+'] '+msg.text);
+    logger.info('['+chatId+'] '+msg.text);
 });

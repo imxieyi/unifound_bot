@@ -60,3 +60,4 @@ typings/
 .html
 config.json
 package-lock.json
+.log

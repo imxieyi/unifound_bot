@@ -5,6 +5,21 @@ const DOMParser = require('xmldom').DOMParser;
 const util = require('util');
 const pug = require('pug');
 const webshot = require('webshot');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, label, prettyPrint } = format;
+const config = require('./config');
+
+const logger = createLogger({
+    level: 'info',
+    format: combine(
+        timestamp(),
+        prettyPrint()
+    ),
+    transports: [
+        new transports.Console(),
+        new transports.File({ filename: config.log_file })
+    ]
+});
 
 const pms_base = 'http://pms.sustc.edu.cn';
 const pms_service_url = '/Service.asmx';
@@ -37,14 +52,14 @@ var public_login = async function() {
             var sessionid = nodes[0].textContent;
             if (sessionid.startsWith('ok,')) {
                 pms_session = sessionid.replace(/^ok,/, '');
-                console.log('Got session id ' + pms_session);
+                logger.info('Got session id ' + pms_session);
                 succeed = true;
             } else {
-                console.error('No session id, got ' + sessionid);
+                logger.error('No session id, got ' + sessionid);
             }
         }
     }).catch(function (err) {
-        console.error('Public login error: ' + err.statusCode);
+        logger.error('Public login error: ' + err.statusCode);
     });
     return succeed;
 };
@@ -90,7 +105,7 @@ var get_all_stations = async function () {
             }
         }
     }).catch(function (err) {
-        console.error('Check session error:' + typeof err.statusCode !== 'undefined' && err.statusCode ? err.statusCode : err);
+        logger.error('Check session error:' + typeof err.statusCode !== 'undefined' && err.statusCode ? err.statusCode : err);
     });
     return result;
 }
