@@ -61,4 +61,4 @@ typings/
 config.json
 package-lock.json
 .log
-.png
+*.png

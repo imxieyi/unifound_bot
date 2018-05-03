@@ -28,7 +28,7 @@
     "pug": "^2.0.3",
     "request-promise": "^4.2.2",
     "stream-to-buffer": "^0.1.0",
-    "webshot": "^0.18.0",
+    "webshot": "^0.11.1",
     "winston": "^3.0.0-rc5",
     "xmldom": "^0.1.27"
   }

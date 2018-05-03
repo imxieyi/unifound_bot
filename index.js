@@ -46,13 +46,19 @@ bot.onText(/\/allstations/, async (msg) => {
     const chatId = msg.chat.id;
     try {
         bot.sendMessage(chatId, 'Query requested, please wait...');
-        var stream = await pms.stream_all_stations();
-        streamToBuffer(stream, function (err, buffer) {
-            var fileOptions = {
-                filename: chatId + '.png',
-                contentType: 'image/png'
-            };
-            bot.sendPhoto(chatId, buffer, {}, fileOptions);
+        pms.stream_all_stations((err, stream) => {
+            if (err) {
+                logger.error(err);
+                bot.sendMessage(chatId, 'Something went wrong.');
+            } else {
+                streamToBuffer(stream, function (err, buffer) {
+                    var fileOptions = {
+                        filename: chatId + '.png',
+                        contentType: 'image/png'
+                    };
+                    bot.sendPhoto(chatId, buffer, {}, fileOptions);
+                });
+            }
         });
     } catch (err) {
         logger.error(err);

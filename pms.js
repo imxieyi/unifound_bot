@@ -110,21 +110,21 @@ var get_all_stations = async function () {
     return result;
 }
 
-var render_stations = function (stations) {
+var render_stations = function (stations, cb) {
     var html = genHTML({
         stations: stations,
         timestamp: update_timestamp.toString()
     });
-    return webshot(html, { 
+    webshot(html, { 
         siteType: 'html',
         windowSize: {
             width: 750,
-            height: 30 * (stations.length + 2)
+            height: 31 * (stations.length + 2)
         }
-    });
+    }, cb);
 }
 
-var stream_all_stations = async function () {
+var stream_all_stations = async function (cb) {
     if (typeof update_timestamp == 'undefined' || new Date().getTime() - update_timestamp.getTime() > 60000) {
         var refreshed = false;
         if (pms_session !== '') {
@@ -137,10 +137,10 @@ var stream_all_stations = async function () {
             }
         }
     }
-    return render_stations(pms_all_stations);
+    return await render_stations(pms_all_stations, cb);
 }
 
-var stream_query_stations = async function (query) {
+var stream_query_stations = async function (query, cb) {
     if (typeof update_timestamp == 'undefined' || new Date().getTime() - update_timestamp.getTime() > 60000) {
         var refreshed = false;
         if (pms_session !== '') {
@@ -160,15 +160,16 @@ var stream_query_stations = async function (query) {
             query_stations.push(station);
         }
     }
-    return render_stations(query_stations);
+    return await render_stations(query_stations, cb);
 }
 
 var main = async function () {
     var fs = require('fs');
-    var stream = await stream_all_stations();
-    var file = fs.createWriteStream('test.png', {encoding: 'binary'});
-    stream.on('data', function (data) {
-        file.write(data.toString('binary'), 'binary');
+    stream_all_stations((err, stream) => {
+        var file = fs.createWriteStream('test.png', { encoding: 'binary' });
+        stream.on('data', function (data) {
+            file.write(data.toString('binary'), 'binary');
+        });
     });
 }
 
