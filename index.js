@@ -48,7 +48,11 @@ bot.onText(/\/allstations/, async (msg) => {
         bot.sendMessage(chatId, 'Query requested, please wait...');
         var stream = await pms.stream_all_stations();
         streamToBuffer(stream, function (err, buffer) {
-            bot.sendPhoto(chatId, buffer);
+            var fileOptions = {
+                filename: chatId + '.png',
+                contentType: 'image/png'
+            };
+            bot.sendPhoto(chatId, buffer, {}, fileOptions);
         });
     } catch (err) {
         logger.error(err);
