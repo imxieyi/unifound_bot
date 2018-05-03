@@ -1,4 +1,5 @@
 # Telegram Bot for SUSTech Unifound PMS
+Telegram Link: [http://t.me/sustech_unifound_bot](http://t.me/sustech_unifound_bot)
 
 ## Introduction
 This is a [Telegram](https://telegram.org/) bot for SUSTech [Unifound Print Management Service (PMS)](http://pms.sustc.edu.cn/) (only accessible from campus network).
