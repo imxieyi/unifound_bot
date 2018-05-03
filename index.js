@@ -67,12 +67,12 @@ bot.onText(/\/allstations/, async (msg) => {
 });
 
 // Return status of stations containing given name
-bot.onText(/\/stations (.+)/, async (msg, match) => {
+bot.onText(/\/stations(@sustech_unifound_bot)?\s+([^\s]+)/, async (msg, match) => {
     const chatId = msg.chat.id;
     if (match) {
         try {
             bot.sendMessage(chatId, 'Query requested, please wait...');
-            pms.stream_query_stations(match[1], (err, stream) => {
+            pms.stream_query_stations(match[2], (err, stream) => {
                 if (err) {
                     logger.error(err);
                     bot.sendMessage(chatId, 'Something went wrong.');
@@ -97,5 +97,5 @@ bot.onText(/\/stations (.+)/, async (msg, match) => {
 
 bot.on('message', (msg) => {
     const chatId = msg.chat.id;
-    logger.info('['+chatId+'] '+msg.text);
+    logger.info('[' + chatId + '] ' + msg.text);
 });
